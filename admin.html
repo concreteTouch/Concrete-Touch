@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة تحكم Concrete Touch</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--ink:#0B0B0B;--cr:#FFFBF1;--g:linear-gradient(90deg,#FFF3B4,#FFD2D0 50%,#FFA6F5)}
+*{box-sizing:border-box}body{margin:0;background:var(--cr);color:var(--ink);font:400 1rem/1.7 Tahoma,'Segoe UI',sans-serif}
+button{font:inherit;cursor:pointer}input,select,textarea{font:inherit;width:100%;padding:8px 12px;border:2px solid var(--ink);border-radius:12px;background:#fff}
+.b{background:var(--ink);color:var(--cr);border:0;border-radius:99px;padding:8px 20px}.b.r{background:#b3261e}.b.l{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.top{background:var(--g);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs .b{background:var(--cr);color:var(--ink)}.tabs .b.on{background:var(--ink);color:var(--cr)}
+main{max-width:980px;margin:0 auto;padding:22px}
+.box{background:#fff;border:2px solid var(--ink);border-radius:20px;padding:16px;margin-bottom:14px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}
+label{font-size:.85rem;font-weight:600;display:block}
+.gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.gr img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;margin-bottom:6px}
+.act{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+#login{max-width:380px;margin:12vh auto;padding:0 20px;display:grid;gap:12px}#app{display:none}
+#msg{position:fixed;bottom:16px;inset-inline:16px;max-width:420px;margin:auto;background:var(--ink);color:var(--cr);padding:10px 16px;border-radius:14px;display:none;text-align:center}
+</style></head>
+<body>
+<form id="login"><h2>دخول الأدمن</h2><input id="em" type="email" placeholder="الإيميل" required autocomplete="username"><input id="pw" type="password" placeholder="كلمة السر" required autocomplete="current-password"><button class="b">دخول</button><small id="le" style="color:#b3261e"></small></form>
+<div id="app"><div class="top"><strong>لوحة تحكم Concrete Touch</strong>
+<div class="tabs" id="tabs"><button class="b on" data-t="offers">شريط العروض</button><button class="b" data-t="images">الصور</button><button class="b" data-t="products">المنتجات</button><button class="b" data-t="content">محتوى الصفحة</button><button class="b" data-t="settings">الإعدادات</button></div>
+<button class="b l" id="out">خروج</button></div><main id="main"></main></div>
+<div id="msg"></div>
+<script>
+const SB=supabase.createClient("https://wosxqmyjbeoxiqrvcjxt.supabase.co","sb_publishable_cqv69CeReijZGD2llvXg-w_NQSWfYdN"),BK="site-images";
+const $=i=>document.getElementById(i),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toast=m=>{$("msg").textContent=m;$("msg").style.display="block";setTimeout(()=>$("msg").style.display="none",2600)};
+const ok=r=>{if(r.error){toast("خطأ: "+r.error.message);throw r.error}return r.data};
+let tab="offers",slot="hero";
+async function up(f){const p=`${crypto.randomUUID()}.${f.name.split(".").pop()}`;ok(await SB.storage.from(BK).upload(p,f,{contentType:f.type}));return SB.storage.from(BK).getPublicUrl(p).data.publicUrl}
+async function rm(u){const m=`/${BK}/`,i=(u||"").indexOf(m);if(i>-1)await SB.storage.from(BK).remove([u.slice(i+m.length)])}
+async function enter(){
+ const {data:{user}}=await SB.auth.getUser();if(!user)return;
+ const {data}=await SB.from("admin_users").select("id").eq("id",user.id).eq("is_admin",true).maybeSingle();
+ if(!data){await SB.auth.signOut();$("le").textContent="الحساب ده مش أدمن.";return}
+ $("login").style.display="none";$("app").style.display="block";show();
+}
+$("login").onsubmit=async e=>{e.preventDefault();$("le").textContent="";
+ const {error}=await SB.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value});
+ if(error)$("le").textContent="الإيميل أو كلمة السر غلط.";else enter()};
+$("out").onclick=async()=>{await SB.auth.signOut();location.reload()};
+$("tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;tab=b.dataset.t;[...$("tabs").children].forEach(x=>x.classList.toggle("on",x===b));show()};
+const show=()=>({offers,images,products,content,settings})[tab]();
+
+async function offers(){
+ const d=ok(await SB.from("offers").select("*").order("sort"));
+ $("main").innerHTML=`<div class="box"><h3>نصوص شريط العروض (اللي فوق الموقع)</h3><p>اكتبي أي نص وإيموجي. الأرقام الأصغر بتظهر الأول.</p>
+ ${d.map(o=>`<div class="row" data-id="${o.id}" style="margin-bottom:10px"><div style="grid-column:span 2"><label>النص</label><input class="t" value="${esc(o.text)}"></div><div><label>الترتيب</label><input class="s" type="number" value="${o.sort}"></div><div><label><input class="a" type="checkbox" ${o.is_active?"checked":""} style="width:auto"> ظاهر</label>
+ <div class="act"><button class="b" data-a="so">حفظ</button><button class="b r" data-a="do">حذف</button></div></div></div>`).join("")}
+ <button class="b" id="no">+ إضافة عرض</button></div>`;
+ $("no").onclick=async()=>{ok(await SB.from("offers").insert({text:"عرض جديد",sort:d.length+1}));offers()};
+ $("main").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b)return;const r=b.closest(".row"),id=r.dataset.id;
+  if(b.dataset.a==="so"){ok(await SB.from("offers").update({text:r.querySelector(".t").value,sort:+r.querySelector(".s").value||0,is_active:r.querySelector(".a").checked}).eq("id",id));toast("تم الحفظ")}
+  if(b.dataset.a==="do"&&confirm("حذف العرض؟")){ok(await SB.from("offers").delete().eq("id",id));offers()}};
+}
+
+const SL={hero:"صور الواجهة (أول 3 بتظهر)",about:"صورة قسم «عن لمسة كونكريت»",gallery:"معرض الأعمال"};
+async function images(){
+ const d=ok(await SB.from("images").select("*").eq("slot",slot).order("sort"));
+ $("main").innerHTML=`<div class="box"><div class="row"><div><label>القسم</label><select id="sl">${Object.entries(SL).map(([k,v])=>`<option value="${k}" ${k===slot?"selected":""}>${v}</option>`).join("")}</select></div>
+ <div><label>رفع صور جديدة</label><input id="fi" type="file" accept="image/*" multiple></div></div></div>
+ <div class="gr">${d.map(i=>`<div class="box" data-id="${i.id}" data-u="${esc(i.url)}"><img src="${esc(i.url)}" alt="">
+ <label>وصف الصورة</label><input class="al" value="${esc(i.alt)}"><label>الترتيب</label><input class="so" type="number" value="${i.sort}">
+ <div class="act"><button class="b" data-a="sv">حفظ</button><label class="b l" style="cursor:pointer">استبدال<input class="rp" type="file" accept="image/*" hidden></label><button class="b r" data-a="dl">حذف</button></div></div>`).join("")||"<p>مفيش صور في القسم ده.</p>"}</div>`;
+ $("sl").onchange=e=>{slot=e.target.value;images()};
+ $("fi").onchange=async e=>{let n=d.length;for(const f of e.target.files)ok(await SB.from("images").insert({slot,url:await up(f),alt:"",sort:++n}));toast("تم الرفع");images()};
+ $("main").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b)return;const c=b.closest(".box"),id=c.dataset.id;
+  if(b.dataset.a==="sv"){ok(await SB.from("images").update({alt:c.querySelector(".al").value,sort:+c.querySelector(".so").value||0}).eq("id",id));toast("تم الحفظ")}
+  if(b.dataset.a==="dl"&&confirm("حذف الصورة؟")){await rm(c.dataset.u);ok(await SB.from("images").delete().eq("id",id));images()}};
+ $("main").onchange=async e=>{if(!e.target.classList.contains("rp"))return;const c=e.target.closest(".box");
+  const u=await up(e.target.files[0]);ok(await SB.from("images").update({url:u}).eq("id",c.dataset.id));await rm(c.dataset.u);toast("تم الاستبدال");images()};
+}
+
+async function products(edit){
+ const d=ok(await SB.from("products").select("*").order("id",{ascending:false})),p=edit?d.find(x=>x.id==edit):{status:"available",is_active:true};
+ $("main").innerHTML=`<form class="box" id="pf"><h3>${edit?"تعديل منتج":"إضافة منتج"}</h3><div class="row">
+ <div><label>الاسم</label><input id="n" value="${esc(p.name)}" required></div><div><label>السعر (ج.م)</label><input id="pr" type="number" value="${p.price??""}"></div>
+ <div><label>القسم</label><input id="ca" value="${esc(p.category)}" placeholder="كوستر / منظمات / ورد"></div><div><label>الألوان المتاحة</label><input id="co" value="${esc(p.colors)}" placeholder="كل الألوان"></div>
+ <div><label>شارة على الصورة</label><input id="ba" value="${esc(p.badge)}" placeholder="متاح حجز جميع الألوان"></div>
+ <div><label>الحالة</label><select id="st"><option value="available">متاح</option><option value="booking">متاح حجز</option><option value="soldout">خلص</option></select></div>
+ <div><label>الصورة</label><input id="im" type="file" accept="image/*"></div><div><label><input id="ac" type="checkbox" style="width:auto" ${p.is_active?"checked":""}> ظاهر في الموقع</label></div></div>
+ <label style="margin-top:10px">الوصف</label><textarea id="ds" rows="3">${esc(p.description)}</textarea>
+ <div class="act"><button class="b">${edit?"حفظ التعديل":"إضافة"}</button>${edit?'<button type="button" class="b l" id="cx">إلغاء</button>':""}</div></form>
+ <div class="gr">${d.map(x=>`<div class="box" data-id="${x.id}">${x.image_url?`<img src="${esc(x.image_url)}" alt="">`:""}<strong>${esc(x.name)}</strong><div>${x.price??0} ج.م — ${esc(x.category)}</div>
+ <div class="act"><button class="b" data-a="ed">تعديل</button><button class="b r" data-a="dl">حذف</button></div></div>`).join("")}</div>`;
+ $("st").value=p.status||"available";if($("cx"))$("cx").onclick=()=>products();
+ $("pf").onsubmit=async e=>{e.preventDefault();let u=p.image_url||"";const f=$("im").files[0];if(f){const nu=await up(f);await rm(u);u=nu}
+  const row={name:$("n").value.trim(),price:+$("pr").value||0,category:$("ca").value.trim(),colors:$("co").value.trim(),badge:$("ba").value.trim(),status:$("st").value,description:$("ds").value.trim(),image_url:u,is_active:$("ac").checked};
+  ok(edit?await SB.from("products").update(row).eq("id",edit):await SB.from("products").insert(row));toast("تم الحفظ");products()};
+ $("main").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b)return;const id=b.closest(".box").dataset.id;
+  if(b.dataset.a==="ed"){products(id);scrollTo(0,0)}
+  if(b.dataset.a==="dl"&&confirm("حذف المنتج؟")){const x=d.find(y=>y.id==id);await rm(x.image_url);ok(await SB.from("products").delete().eq("id",id));products()}};
+}
+
+
+const KD={feature:["مميزات (ليه لمسة كونكريت)","العنوان","الوصف","إيموجي"],color:["الألوان","اسم اللون","-","كود اللون مثل #FFA6F5"],step:["خطوات الطلب","العنوان","الوصف","-"],review:["آراء العملاء","الاسم","نص الرأي","المدينة"],faq:["أسئلة شائعة","السؤال","الإجابة","-"]};
+let kd="feature";
+async function content(){
+ const d=ok(await SB.from("items").select("*").eq("kind",kd).order("sort")),f=KD[kd];
+ $("main").innerHTML=`<div class="box"><label>القسم</label><select id="kd">${Object.entries(KD).map(([k,v])=>`<option value="${k}" ${k===kd?"selected":""}>${v[0]}</option>`).join("")}</select></div>
+ ${d.map(x=>`<div class="box row" data-id="${x.id}"><div><label>${f[1]}</label><input class="t" value="${esc(x.title)}"></div>${f[2]!=="-"?`<div><label>${f[2]}</label><textarea class="x" rows="2">${esc(x.text)}</textarea></div>`:""}${f[3]!=="-"?`<div><label>${f[3]}</label><input class="e" value="${esc(x.extra)}"></div>`:""}
+ <div><label>الترتيب</label><input class="s" type="number" value="${x.sort}"><label><input class="a" type="checkbox" style="width:auto" ${x.is_active?"checked":""}> ظاهر</label></div>
+ <div class="act"><button class="b" data-a="sv">حفظ</button><button class="b r" data-a="dl">حذف</button></div></div>`).join("")}
+ <button class="b" id="ni">+ إضافة</button>`;
+ $("kd").onchange=e=>{kd=e.target.value;content()};
+ $("ni").onclick=async()=>{ok(await SB.from("items").insert({kind:kd,title:"جديد",sort:d.length+1}));content()};
+ $("main").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b)return;const r=b.closest(".box"),id=r.dataset.id,q=s=>r.querySelector(s);
+  if(b.dataset.a==="sv"){ok(await SB.from("items").update({title:q(".t").value,text:q(".x")?q(".x").value:"",extra:q(".e")?q(".e").value:"",sort:+q(".s").value||0,is_active:q(".a").checked}).eq("id",id));toast("تم الحفظ")}
+  if(b.dataset.a==="dl"&&confirm("حذف؟")){ok(await SB.from("items").delete().eq("id",id));content()}};
+}
+const KS={brand:"اسم البراند",hero_title:"عنوان الواجهة",hero_sub:"نص تحت العنوان",hero_cta:"نص زر الواجهة",about_title:"عنوان قسم عن لمسة كونكريت",about_text:"نص قسم عن لمسة كونكريت",whatsapp:"رقم واتساب (بكود الدولة بدون +، مثال 201001234567)",instagram:"رابط إنستجرام",tiktok:"رابط تيك توك",footer_note:"سطر الفوتر"};
+async function settings(){
+ const d=Object.fromEntries(ok(await SB.from("settings").select("*")).map(r=>[r.key,r.value]));
+ $("main").innerHTML=`<form class="box" id="sf"><div class="row" style="margin-bottom:12px"><div><label>اللوجو</label>${d.logo_url?`<img src="${esc(d.logo_url)}" style="width:80px;border-radius:12px" alt="">`:""}<input id="lg" type="file" accept="image/*"></div></div>
+ ${Object.entries(KS).map(([k,v])=>`<label style="margin-top:10px">${v}</label><input data-k="${k}" value="${esc(d[k])}">`).join("")}
+ <div class="act"><button class="b">حفظ الإعدادات</button></div></form>`;
+ $("sf").onsubmit=async e=>{e.preventDefault();const rows=[...document.querySelectorAll("[data-k]")].map(i=>({key:i.dataset.k,value:i.value.trim()}));
+  const f=$("lg").files[0];if(f){const u=await up(f);await rm(d.logo_url);rows.push({key:"logo_url",value:u})}
+  ok(await SB.from("settings").upsert(rows));toast("تم الحفظ");settings()};
+}
+enter();
+</script></body></html>

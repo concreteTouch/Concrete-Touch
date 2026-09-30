@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concrete Touch — لمسة كونكريت</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--y:#FFF3B4;--pe:#FFD2D0;--pk:#FFA6F5;--ink:#0B0B0B;--cr:#FFFBF1;--g:linear-gradient(90deg,#FFF3B4,#FFD2D0 50%,#FFA6F5);--serif:'Amiri','Playfair Display',serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--cr);color:var(--ink);font:400 1rem/1.8 'IBM Plex Sans Arabic',sans-serif;overflow-x:hidden}
+img{max-width:100%;display:block}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.bar{background:var(--ink);color:var(--cr);overflow:hidden;padding:8px 0;font-size:.92rem}
+.bar .tr{display:flex;width:max-content;direction:ltr;animation:mq 30s linear infinite}
+.bar span{padding:0 22px;white-space:nowrap;direction:rtl}.bar span:after{content:"✦";margin-inline-start:44px;color:var(--pk)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.top{background:var(--g);padding-bottom:70px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cr);border-radius:0 0 26px 26px;padding:10px 22px;max-width:1000px;margin:0 auto;box-shadow:0 10px 30px -18px #0007}
+.logo{display:flex;align-items:center;gap:10px;font:700 1.35rem 'Playfair Display',serif}
+.logo img{width:44px;height:44px;border-radius:12px;object-fit:cover}
+.nav nav{display:flex;gap:24px;font-weight:500}.nav nav a:hover{text-decoration:underline;text-underline-offset:6px}
+.cartb{background:var(--ink);color:var(--cr);border:0;border-radius:99px;padding:6px 16px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding-top:60px;position:relative}
+.hero:before{content:"CT";position:absolute;inset-inline-start:-2%;top:-30px;font:700 30rem/1 'Playfair Display',serif;opacity:.05;pointer-events:none;direction:ltr}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.25;margin:0}
+h1{font-size:clamp(2.6rem,6vw,4.6rem)}
+.hero p{font-size:1.15rem;max-width:34ch}
+.btn{display:inline-block;background:var(--ink);color:var(--cr);border:0;border-radius:99px;padding:12px 28px;font-weight:600}
+.btn.l{background:var(--cr);color:var(--ink)}
+.stack{position:relative;min-height:420px}
+.stack img{position:absolute;width:62%;aspect-ratio:4/5;object-fit:cover;border:10px solid var(--cr);border-radius:22px;box-shadow:0 20px 40px -20px #0008}
+.stack img:nth-child(1){top:0;inset-inline-start:0;transform:rotate(-5deg)}
+.stack img:nth-child(2){top:70px;inset-inline-end:0;transform:rotate(4deg)}
+.stack img:nth-child(3){bottom:-20px;inset-inline-start:22%;width:46%;transform:rotate(-2deg)}
+.plate{display:inline-block;background:var(--cr);border-radius:16px;padding:2px 16px}
+section{padding:70px 0}
+.sh{margin-bottom:30px}.sh h2{font-size:2.3rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{background:transparent;border:2px solid var(--ink);border-radius:99px;padding:4px 18px}
+.chip.on{background:var(--ink);color:var(--cr)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:26px}
+.card{background:var(--g);border-radius:28px 28px 28px 8px;padding:12px}
+.card .im{position:relative;aspect-ratio:1;border-radius:20px;overflow:hidden;background:var(--cr);cursor:pointer}
+.card .im img{width:100%;height:100%;object-fit:cover}
+.card .nm{position:absolute;bottom:10px;inset-inline:10px;background:var(--cr);border-radius:14px;padding:4px 14px;font:700 1.15rem var(--serif)}
+.tag{position:absolute;top:10px;inset-inline-start:10px;background:var(--ink);color:var(--cr);border-radius:99px;padding:0 12px;font-size:.8rem}
+.card .bd{padding:12px 6px 4px}.card p{margin:0 0 8px;font-size:.92rem}
+.cols{font-size:.85rem;opacity:.8}
+.ft{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}
+.pr{font:700 1.3rem var(--serif)}
+.add{background:var(--ink);color:var(--cr);border:0;border-radius:99px;padding:6px 16px;font-size:.9rem}.add:disabled{opacity:.4}
+.alt{background:var(--g)}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+.about img{border:10px solid var(--cr);border-radius:28px;aspect-ratio:1;object-fit:cover;box-shadow:0 20px 40px -22px #0008}
+.gal{columns:3 220px;gap:14px}.gal img{width:100%;margin-bottom:14px;border-radius:18px;border:6px solid var(--cr)}
+footer{background:var(--ink);color:var(--cr);padding:40px 0;text-align:center}
+footer a{margin:0 12px;text-decoration:underline;text-underline-offset:5px}
+.ov{position:fixed;inset:0;background:#0009;display:none;z-index:9}.ov.on{display:block}
+.dr{position:absolute;inset-block:0;inset-inline-start:0;width:min(400px,100%);background:var(--cr);padding:20px;display:flex;flex-direction:column;gap:10px;overflow:auto}
+.ci{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #0002;padding:8px 0}
+.ci button{background:none;border:1px solid var(--ink);border-radius:8px;width:26px}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.feat div{border:2px solid var(--ink);border-radius:24px 24px 24px 6px;padding:20px;background:var(--cr)}
+.feat b{font:700 1.3rem var(--serif);display:block}.feat i{font-style:normal;font-size:1.8rem}
+.sw{display:flex;flex-wrap:wrap;gap:22px}.sw div{text-align:center;font-weight:500}
+.sw span{display:block;width:76px;height:76px;border-radius:50%;border:5px solid var(--cr);box-shadow:0 10px 22px -12px #0009;margin:0 auto 6px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;counter-reset:s}
+.steps div{background:var(--cr);border-radius:26px;padding:22px;counter-increment:s}
+.steps div:before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--cr);font:700 1.2rem var(--serif);margin-bottom:8px}
+.steps b{font:700 1.3rem var(--serif)}
+.rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.rv blockquote{margin:0;background:var(--g);border-radius:26px 26px 6px 26px;padding:20px}
+.rv cite{display:block;margin-top:8px;font-style:normal;font-weight:600}
+.faq details{border-bottom:2px solid var(--ink);padding:14px 0;max-width:760px}
+.faq summary{font:700 1.25rem var(--serif);cursor:pointer}.faq p{margin:8px 0 0}
+.cta{background:var(--ink);color:var(--cr);border-radius:36px;padding:44px 28px;text-align:center}
+.cta h2{font-size:2.2rem;margin-bottom:8px}
+.empty{padding:30px;text-align:center;opacity:.7}
+@media(max-width:760px){.hero,.about{grid-template-columns:1fr}.nav nav{display:none}.stack{min-height:360px}}
+@media(prefers-reduced-motion:reduce){.bar .tr{animation:none}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar" role="note"><div class="tr" id="tr"></div></div>
+<div class="top">
+<header class="nav"><a class="logo" href="#"><img id="logoImg" alt="" hidden><span id="brand">Concrete Touch</span></a>
+<nav><a href="#products">المنتجات</a><a href="#about">عن لمسة كونكريت</a><a href="#why">ليه لمسة كونكريت</a><a href="#colors">الألوان</a><a href="#order">إزاي تطلبي</a><a href="#gallery">أعمالنا</a><a href="#faq">أسئلة</a></nav>
+<button class="cartb" id="cartOpen">السلة (<span id="cc">0</span>)</button></header>
+<div class="wrap hero"><div>
+<h1 id="hTitle">لمسة بحرية تزيّن مكانك</h1>
+<p id="hSub">قطع كونكريت معمولة بإيدينا، بألوان تختاريها بنفسك.</p>
+<a class="btn" id="hCta" href="#products">شوفي القطع</a></div>
+<div class="stack" id="stack"></div></div></div>
+
+<section id="products"><div class="wrap">
+<div class="sh"><span class="plate"><h2>قطعنا</h2></span></div>
+<div class="chips" id="chips"></div><div class="grid" id="grid"><div class="empty">جاري التحميل…</div></div></div></section>
+
+<section id="why" style="display:none"><div class="wrap"><div class="sh"><span class="plate"><h2>ليه لمسة كونكريت؟</h2></span></div><div class="feat" id="l-feature"></div></div></section>
+<section id="colors" style="display:none" class="alt"><div class="wrap"><div class="sh"><span class="plate"><h2>ألوان بتختاريها بنفسك</h2></span></div><div class="sw" id="l-color"></div></div></section>
+<section id="order" style="display:none"><div class="wrap"><div class="sh"><span class="plate"><h2>إزاي تطلبي؟</h2></span></div><div class="steps" id="l-step"></div></div></section>
+<section class="alt" id="about"><div class="wrap about"><img id="aImg" alt="" hidden>
+<div><h2 id="aTitle">كل قطعة معمولة بحب 🌸</h2><p id="aText" style="max-width:46ch">كل قطعة بتتصب وتتلوّن وتتشطّب باليد، عشان تطلع مختلفة عن غيرها.</p>
+<a class="btn l" id="waLink" href="#" style="margin-top:12px">احجزي لونك على واتساب</a></div></div></section>
+
+<section id="gallery"><div class="wrap"><div class="sh"><span class="plate"><h2>من شغلنا</h2></span></div><div class="gal" id="gal"></div></div></section>
+
+<section id="reviews" style="display:none"><div class="wrap"><div class="sh"><span class="plate"><h2>قالوا إيه عننا</h2></span></div><div class="rv" id="l-review"></div></div></section>
+<section id="faq" style="display:none" class="alt"><div class="wrap"><div class="sh"><span class="plate"><h2>أسئلة بتتكرر</h2></span></div><div class="faq" id="l-faq"></div></div></section>
+<section><div class="wrap"><div class="cta"><h2>جاهزة تحجزي لونك؟</h2><p>ابعتيلنا على واتساب واختاري القطعة واللون، وإحنا نجهزها ليكي.</p><a class="btn l" id="waLink2" href="#">كلمينا على واتساب</a></div></div></section>
+<footer><div class="wrap"><div class="logo" style="justify-content:center;margin-bottom:10px" id="fBrand">Concrete Touch</div>
+<div><a id="ig" href="#" target="_blank" rel="noopener">إنستجرام</a><a id="tt" href="#" target="_blank" rel="noopener">تيك توك</a></div>
+<p id="fNote" style="opacity:.7">لمسة كونكريت — معمولة بحب</p></div></footer>
+
+<div class="ov" id="ov"><aside class="dr" role="dialog" aria-label="السلة"><div style="display:flex;justify-content:space-between"><h3>السلة</h3><button class="add" id="cartClose">إغلاق</button></div>
+<div id="items" style="flex:1"></div><div class="pr" id="tot"></div><button class="btn" id="send">إرسال الطلب على واتساب</button></aside></div>
+
+<script>
+const U="https://wosxqmyjbeoxiqrvcjxt.supabase.co",K="sb_publishable_cqv69CeReijZGD2llvXg-w_NQSWfYdN";
+const $=i=>document.getElementById(i);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const url=u=>/^https?:\/\//i.test(u||"")?u:"";
+const get=t=>fetch(`${U}/rest/v1/${t}`,{headers:{apikey:K,Authorization:"Bearer "+K}}).then(r=>r.ok?r.json():Promise.reject(r.status));
+const ST={available:"",booking:"متاح حجز",soldout:"خلصت"};
+let S={},P=[],cart=JSON.parse(localStorage.getItem("ct_cart")||"{}"),cat="";
+function fill(){
+ const s=S,set=(i,v)=>v&&($(i).textContent=v);
+ set("hTitle",s.hero_title);set("hSub",s.hero_sub);set("hCta",s.hero_cta);set("aTitle",s.about_title);set("aText",s.about_text);set("fNote",s.footer_note);
+ if(s.brand){set("brand",s.brand);set("fBrand",s.brand);document.title=s.brand}
+ if(url(s.logo_url)){$("logoImg").src=s.logo_url;$("logoImg").hidden=false}
+ $("ig").href=url(s.instagram)||"#";$("tt").href=url(s.tiktok)||"#";
+ $("waLink").href=$("waLink2").href=s.whatsapp?`https://wa.me/${s.whatsapp}`:"#";
+}
+function imgs(slot,rows){return rows.filter(r=>r.slot===slot&&url(r.url))}
+function cards(){
+ const l=P.filter(p=>!cat||p.category===cat);
+ $("grid").innerHTML=l.length?l.map(p=>{const out=p.status==="soldout";return `<article class="card"><div class="im">${url(p.image_url)?`<img loading="lazy" src="${esc(p.image_url)}" alt="${esc(p.name)}">`:""}${p.badge?`<span class="tag">${esc(p.badge)}</span>`:""}<div class="nm">${esc(p.name)}</div></div>
+ <div class="bd"><p>${esc(p.description)}</p>${p.colors?`<div class="cols">الألوان: ${esc(p.colors)}</div>`:""}
+ <div class="ft"><span class="pr">${p.price?p.price+" ج.م":""}</span><button class="add" data-id="${p.id}" ${out?"disabled":""}>${out?ST.soldout:p.status==="booking"?"احجزي":"أضيفي للسلة"}</button></div></div></article>`}).join(""):'<div class="empty">مفيش قطع في القسم ده حاليًا.</div>';
+}
+function chips(){
+ const c=[...new Set(P.map(p=>p.category).filter(Boolean))];
+ $("chips").innerHTML=c.length?["",...c].map(x=>`<button class="chip${x===cat?" on":""}" data-c="${esc(x)}">${x||"الكل"}</button>`).join(""):"";
+}
+function bar(o){
+ const h=o.map(x=>`<span>${esc(x.text)}</span>`).join("");
+ $("tr").innerHTML=h.repeat(Math.max(2,Math.ceil(12/Math.max(o.length,1))*2));
+}
+
+const R={feature:x=>`<div><i>${esc(x.extra)}</i><b>${esc(x.title)}</b><p>${esc(x.text)}</p></div>`,
+ color:x=>`<div><span style="background:${/^#[0-9a-f]{3,8}$/i.test(x.extra)?x.extra:"#ccc"}"></span>${esc(x.title)}</div>`,
+ step:x=>`<div><b>${esc(x.title)}</b><p>${esc(x.text)}</p></div>`,
+ review:x=>`<blockquote>${esc(x.text)}<cite>${esc(x.title)}${x.extra?"، "+esc(x.extra):""}</cite></blockquote>`,
+ faq:x=>`<details><summary>${esc(x.title)}</summary><p>${esc(x.text)}</p></details>`};
+function blocks(it){for(const k in R){const l=it.filter(x=>x.kind===k);if(!l.length)continue;$("l-"+k).innerHTML=l.map(R[k]).join("");$("l-"+k).closest("section").style.display=""}}
+async function init(){
+ try{
+  const [s,o,i,p,it]=await Promise.all([get("settings?select=*"),get("offers?select=*&is_active=eq.true&order=sort"),get("images?select=*&order=sort"),get("products?select=*&is_active=eq.true&order=id.desc"),get("items?select=*&is_active=eq.true&order=sort")]);blocks(it);
+  s.forEach(r=>S[r.key]=r.value);fill();bar(o);
+  $("stack").innerHTML=imgs("hero",i).slice(0,3).map(r=>`<img src="${esc(r.url)}" alt="${esc(r.alt)}">`).join("");
+  const a=imgs("about",i)[0];if(a){$("aImg").src=a.url;$("aImg").hidden=false}
+  $("gal").innerHTML=imgs("gallery",i).map(r=>`<img loading="lazy" src="${esc(r.url)}" alt="${esc(r.alt)}">`).join("");
+  P=p;chips();cards();
+ }catch(e){$("grid").innerHTML='<div class="empty">تعذّر تحميل البيانات. تأكدي من إعدادات Supabase وحدّثي الصفحة.</div>'}
+}
+$("chips").onclick=e=>{const b=e.target.closest(".chip");if(b){cat=b.dataset.c;chips();cards()}};
+function draw(){
+ const ids=Object.keys(cart).filter(id=>P.find(p=>p.id==id));let t=0;
+ $("cc").textContent=ids.reduce((n,id)=>n+cart[id],0);
+ $("items").innerHTML=ids.length?ids.map(id=>{const p=P.find(x=>x.id==id);t+=p.price*cart[id];return `<div class="ci"><span>${esc(p.name)}</span><span><button data-m="${id}">−</button> ${cart[id]} <button data-p="${id}">+</button></span></div>`}).join(""):'<div class="empty">السلة فاضية.</div>';
+ $("tot").textContent=ids.length?`الإجمالي: ${t} ج.م`:"";
+ localStorage.setItem("ct_cart",JSON.stringify(cart));
+}
+const chg=(id,d)=>{cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];draw()};
+$("grid").onclick=e=>{const b=e.target.closest(".add");if(b){chg(b.dataset.id,1);$("ov").classList.add("on")}};
+$("items").onclick=e=>{const b=e.target.closest("button");if(b)chg(b.dataset.m||b.dataset.p,b.dataset.m?-1:1)};
+$("cartOpen").onclick=()=>{draw();$("ov").classList.add("on")};
+$("cartClose").onclick=()=>$("ov").classList.remove("on");
+$("ov").onclick=e=>{if(e.target===$("ov"))$("ov").classList.remove("on")};
+$("send").onclick=()=>{
+ const ids=Object.keys(cart);if(!ids.length||!S.whatsapp)return;
+ const l=ids.map(id=>{const p=P.find(x=>x.id==id);return p?`• ${p.name} × ${cart[id]}`:""}).join("\n");
+ open(`https://wa.me/${S.whatsapp}?text=${encodeURIComponent("أهلًا، عايز أطلب:\n"+l+"\n\nياريت نحدد الألوان والتوصيل.")}`,"_blank");
+};
+init().then(draw);
+</script>
+</body>
+</html>
